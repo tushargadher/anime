@@ -13,11 +13,9 @@ export default {
     },
     methods: {
         chipRemoved() {
-            console.log("chip is removed", this.data.value)
             this.$store.commit('REMOVE_SELECTED_TYPE', this.data)
         },
         handleClick() {
-            console.log("chip is click");
             this.$store.commit('ADD_TO_SELECTED_TYPE', this.data)
         }
     },
@@ -25,7 +23,6 @@ export default {
         isChipClosable() {
             let selectedType = this.$store.state.selectedType;
             if (!selectedType || !Array.isArray(selectedType)) return false
-            console.log(selectedType);
             return selectedType.some(type => type.value === this.data.value)
         }
     }
