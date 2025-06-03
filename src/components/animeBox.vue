@@ -1,5 +1,5 @@
 <template>
-    <v-card class="mx-auto margin" width="250">
+    <v-card class="mx-auto margin" width="250" @click="handleClick">
         <v-img height="350" :src="detail.images.jpg.image_url" rounded="20" cover>
 
         </v-img>
@@ -25,11 +25,16 @@ export default {
             type: Object,
             required: true
         }
+    },
+    methods: {
+        handleClick() {
+            this.$router.push(`/anime/${this.detail.mal_id}`)
+        }
     }
 }
 </script>
 <style scoped>
-.margin{
+.margin {
     margin: 10px;
 }
 </style>
