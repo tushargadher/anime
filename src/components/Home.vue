@@ -5,18 +5,20 @@
     <div class="container">
         <animeBox v-for="(anime, index) in animeList" :key="index" :detail="anime" />
     </div>
+    <Pagination />
 </template>
 <script>
 import axios from 'axios';
 import EventBus from '@/plugins/eventBus';
 import animeBox from './animeBox.vue';
 import GenreFilterChips from './GenreFilterChips.vue';
-
+import Pagination from './Pagination.vue';
 export default {
     name: 'Home',
     components: {
         animeBox,
-        GenreFilterChips
+        GenreFilterChips,
+        Pagination
     },
     data() {
         return {
@@ -27,16 +29,21 @@ export default {
     computed: {
         animeType() {
             return this.$store.state.selectedType;
+        },
+        currentPage() {
+            return this.$store.state.page;
         }
     },
     methods: {
         async getAnime() {
+            // https://api.jikan.moe/v4/anime?page=1&limit=10
             let typeParam = this.animeType.length > 0 ? this.animeType[0].value : '';
-            let url = `https://api.jikan.moe/v4/anime${typeParam ? `?type=${typeParam}` : ''}`;
+            let url = `https://api.jikan.moe/v4/anime?page=${this.currentPage}${typeParam ? `&type=${typeParam}` : ''}`;
             try {
                 const respone = await axios.get(url);
                 this.originalAnimeList = respone?.data?.data;
-                this.animeList = [...this.originalAnimeList]
+                this.animeList = [...this.originalAnimeList];
+                this.calculateTotalPage(respone);
             } catch (error) {
                 console.log('error while fetching anime', error)
             }
@@ -50,6 +57,11 @@ export default {
             } else {
                 this.animeList = [...this.originalAnimeList];
             }
+        },
+        calculateTotalPage(respone) {
+            let totalRecord = respone?.data?.pagination?.items?.total;
+            let itemCount = respone?.data?.pagination?.items?.count;
+            this.$store.commit('SET_PAGINATION_SIZE', Math.ceil(totalRecord / itemCount));
         }
     },
     watch: {
@@ -58,6 +70,11 @@ export default {
                 this.getAnime();
             },
             deep: true,
+        },
+        currentPage: {
+            handler() {
+                this.getAnime();
+            },
         }
     },
     mounted() {

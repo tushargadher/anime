@@ -13,6 +13,9 @@ export default new Vuex.Store({
             { value: 'tv_special', label: 'TV Special' },
         ],
         selectedType: [],
+        page: 1,
+        parPage: 10,
+        paginationSize: 5,
     },
     getters: {
 
@@ -26,6 +29,12 @@ export default new Vuex.Store({
                 (item) => item.value !== typeToRemove.value
             )
         },
+        UPDATE_PAGE(state, page) {
+            state.page = page
+        },
+        SET_PAGINATION_SIZE(state,totalPage){
+            state.paginationSize = totalPage;
+        }
     },
     actions: {
 
