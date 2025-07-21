@@ -1,29 +1,32 @@
 <template>
-    <v-chip :closable="isChipClosable" @click="handleClick" @click:close="chipRemoved">
-        {{ data.label }}
+    <v-chip
+        :color="isSelected ? 'primary' : undefined"
+        @click="handleClick"
+    >
+        {{ animeType.label }}
     </v-chip>
 </template>
 <script>
 export default {
     props: {
-        data: {
+        animeType: {
             type: Object,
             required: true
         }
     },
     methods: {
-        chipRemoved() {
-            this.$store.commit('REMOVE_SELECTED_TYPE', this.data)
-        },
+        // chipRemoved() {
+        //     this.$store.commit('REMOVE_SELECTED_TYPE', this.animeType)
+        // },
         handleClick() {
-            this.$store.commit('ADD_TO_SELECTED_TYPE', this.data)
-        }
+            this.$store.commit('TOGGLE_SELECTED_TYPE', this.animeType.value)
+        },
     },
     computed: {
-        isChipClosable() {
-            let selectedType = this.$store.state.selectedType;
-            if (!selectedType || !Array.isArray(selectedType)) return false
-            return selectedType.some(type => type.value === this.data.value)
+        isSelected() {
+            return this.$store.state.animeTypes.some(
+                item => item.value === this.animeType.value && item.isSelected
+            )
         }
     }
 }

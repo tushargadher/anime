@@ -1,5 +1,5 @@
 <template>
-    <chip v-for="(type, index) in animeTypes" :key="index" :data="type" />
+    <chip v-for="(type, index) in animeTypes" :key="index" :animeType="type" />
 </template>
 <script>
 import chip from './chip.vue';

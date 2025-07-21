@@ -1,42 +1,35 @@
 import Vuex from "vuex";
+
 export default new Vuex.Store({
-    state: {
-        animeTypes: [
-            { value: 'tv', label: 'TV Series' },
-            { value: 'movie', label: 'Movie' },
-            { value: 'ova', label: 'OVA (Original Video Animation)' },
-            { value: 'special', label: 'Special' },
-            { value: 'ona', label: 'ONA (Original Net Animation)' },
-            { value: 'music', label: 'Music Video' },
-            { value: 'cm', label: 'Commercial (CM)' },
-            { value: 'pv', label: 'Promotional Video (PV)' },
-            { value: 'tv_special', label: 'TV Special' },
-        ],
-        selectedType: [],
-        page: 1,
-        parPage: 10,
-        paginationSize: 5,
-    },
-    getters: {
+  state: {
+    animeTypes: [
+      { value: 'tv', label: 'TV Series', isSelected: false },
+      { value: 'movie', label: 'Movie', isSelected: false },
+      { value: 'ova', label: 'OVA (Original Video Animation)', isSelected: false },
+      { value: 'special', label: 'Special', isSelected: false },
+      { value: 'ona', label: 'ONA (Original Net Animation)', isSelected: false },
+      { value: 'music', label: 'Music Video', isSelected: false },
+      { value: 'cm', label: 'Commercial (CM)', isSelected: false },
+      { value: 'pv', label: 'Promotional Video (PV)', isSelected: false },
+      { value: 'tv_special', label: 'TV Special', isSelected: false },
+    ],
+    page: 1,
+    parPage: 10,
+    paginationSize: 5,
+  },
 
+  mutations: {
+    TOGGLE_SELECTED_TYPE(state, typeValue) {
+      const type = state.animeTypes.find(item => item.value === typeValue);
+      if (type) {
+        type.isSelected = !type.isSelected;
+      }
     },
-    mutations: {
-        ADD_TO_SELECTED_TYPE(state, type) {
-            state.selectedType = [...state.selectedType, type]
-        },
-        REMOVE_SELECTED_TYPE(state, typeToRemove) {
-            state.selectedType = state.selectedType.filter(
-                (item) => item.value !== typeToRemove.value
-            )
-        },
-        UPDATE_PAGE(state, page) {
-            state.page = page
-        },
-        SET_PAGINATION_SIZE(state,totalPage){
-            state.paginationSize = totalPage;
-        }
+    UPDATE_PAGE(state, page) {
+      state.page = page;
     },
-    actions: {
-
+    SET_PAGINATION_SIZE(state, totalPage) {
+      state.paginationSize = totalPage;
     }
-})
+  },
+});

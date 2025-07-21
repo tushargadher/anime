@@ -27,8 +27,8 @@ export default {
         }
     },
     computed: {
-        animeType() {
-            return this.$store.state.selectedType;
+        selectedAnimeType(){
+            return this.$store.state.animeTypes.filter(item => item.isSelected);
         },
         currentPage() {
             return this.$store.state.page;
@@ -37,7 +37,7 @@ export default {
     methods: {
         async getAnime() {
             // https://api.jikan.moe/v4/anime?page=1&limit=10
-            let typeParam = this.animeType.length > 0 ? this.animeType[0].value : '';
+            let typeParam = this.selectedAnimeType.length > 0 ? this.selectedAnimeType[0].value : '';
             let url = `https://api.jikan.moe/v4/anime?page=${this.currentPage}${typeParam ? `&type=${typeParam}` : ''}`;
             try {
                 const respone = await axios.get(url);
@@ -65,7 +65,7 @@ export default {
         }
     },
     watch: {
-        animeType: {
+        selectedAnimeType: {
             handler() {
                 this.getAnime();
             },
